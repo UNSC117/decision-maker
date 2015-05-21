@@ -1,0 +1,33 @@
+body {
+    background: url(../images/bg.jpg) 50% 0;
+    -webkit-animation: slideUp 15s linear infinite;
+    -moz-animation: slideUp 15s linear infinite;
+    animation: slideUp 15s linear infinite;
+}
+
+@-webkit-keyframes slideUp {
+    0% {
+        background-position: 50% 0;
+    }
+    100% {
+        background-position: 50% -250px;
+    }
+}
+
+@-moz-keyframes slideUp {
+    0% {
+        background-position: 50% 0;
+    }
+    100% {
+        background-position: 50% -250px;
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        background-position: 50% 0;
+    }
+    100% {
+        background-position: 50% -250px;
+    }
+}
