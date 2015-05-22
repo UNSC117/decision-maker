@@ -1,0 +1,1 @@
+var welcomeApp = angular.module('welcomeApp', ['ngMaterial']);
