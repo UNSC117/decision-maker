@@ -2,6 +2,7 @@
 
 @section('customizeCSS')
     <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+
     <style>
         md-content {
             background-color: transparent !important;
@@ -45,6 +46,7 @@
         #editItems {
             font-family: 'Architects Daughter', cursive;
         }
+
     </style>
 @stop
 

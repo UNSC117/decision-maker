@@ -46,11 +46,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
         <!-- Angular Material Javascript now available via Google CDN; version 0.9 used here -->
         <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.0/angular-material.js"></script>
+
         <script src="/js/app.js"></script>
         <script src='/js/controllers/categoriesController.js'></script>
         <script src='/js/controllers/playController.js'></script>
         <script src='/js/services/categoriesService.js'></script>
-
 
         @yield('customizeJS')
 

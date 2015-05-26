@@ -1,8 +1,10 @@
 @extends('master')
 
 @section('customizeCSS')
+
     <link href='//fonts.googleapis.com/css?family=Lato:100,200,400,500' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+
     <style>
 
         .content {
@@ -37,7 +39,6 @@
             width: 20em;
             height: 2em;
         }
-
     </style>
 @stop
 
