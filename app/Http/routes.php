@@ -26,8 +26,7 @@ Route::controllers([
 ]);
 
 Route::get('/categories', 'PagesController@index');
-Route::get('/categories/edit', 'PagesController@edit');
-
+Route::get('/items', 'PagesController@showItems');
 
 /**
  *  Api flow setting

@@ -5,7 +5,7 @@ angular.module('categoriesService', []).factory('Category', function($http) {
         },
 
         getItems: function(id) {
-            return $http.get('/api/categories/'+id);
+            return $http.get('/api/categories/' + id);
         },
 
         save:function(category) {

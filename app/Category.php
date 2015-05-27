@@ -3,7 +3,13 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model {
+    protected $fillable = [
+        'name',
+        'items'
+    ];
 
-	//
-
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

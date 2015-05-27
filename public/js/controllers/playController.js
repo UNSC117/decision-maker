@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    dmApp.controller('playCtrl', function($scope, $interval, Category) {
+    dmApp.controller('playCtrl', function($scope, $interval, $mdDialog, Category) {
         $scope.tabs = {};
         $scope.btnText = 'PLAY';
         $scope.playing = false;
@@ -9,7 +9,9 @@
 
         // Get categories from backend
         Category.get().success(function(data) {
-            $scope.tabs = data;
+            if (data) {
+                $scope.tabs = data;
+            }
         });
 
         /**
@@ -60,11 +62,43 @@
          */
         $scope.update = function(category) {
             Category.getItems(category).success(function(data) {
-                $scope.result = category;
-                self.items = data;
+                console.log(data);
+                $scope.result = data.name;
+                // convert items from string(in DB) to array
+                self.items = (data.items).split(',');
             }).error(function(data) {
                 console.log(data);
             });
         };
+        $scope.alert = '';
+        $scope.showItems = function(ev) {
+            $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'items',
+                targetEvent: ev,
+            })
+                .then(function(answer) {
+                    if (answer) {
+                        $scope.alert = 'You\'ve saved this category.';
+                    } else {
+                        $scope.alert = 'You\'ve canceled the edit.';
+                    }
+
+                }, function() {
+                    $scope.alert = 'You cancelled the dialog.';
+                });
+        };
     });
+
+    function DialogController($scope, $mdDialog) {
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function(answer) {
+            $mdDialog.hide(answer);
+        };
+    }
 })();

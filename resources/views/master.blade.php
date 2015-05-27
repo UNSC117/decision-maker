@@ -24,10 +24,45 @@
 
         <link href="/css/master.css" rel="stylesheet">
 
+        <style rel="stylesheet" type="text/css">
+            .content {
+                text-align: center;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .title {
+                margin: 0 auto;
+                font-size: 96px;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                color: #B0BEC5;
+                display: table;
+                font-weight: 200;
+                font-family: 'Lato';
+            }
+
+            md-select {
+                font-weight: 400;
+                font-family: 'Lato';
+            }
+
+            .result {
+                margin-top: 8%;
+                font-family: 'Architects Daughter', cursive;
+            }
+
+            .editBtn {
+                font-family: 'Architects Daughter', cursive;
+            }
+
+        </style>
+
         @yield('customizeCSS')
     </head>
     <body>
-      @include('partials.nav')
+        @include('partials.nav')
 
         <div class="container">
             @yield('content')
