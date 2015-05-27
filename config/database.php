@@ -61,7 +61,7 @@ return [
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-            'port'      => env('DB_PORT', 33060),
+            'port'      => env('DB_PORT', 3306),
 			'strict'    => false,
 		],
 
