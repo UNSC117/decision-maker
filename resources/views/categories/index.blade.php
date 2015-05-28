@@ -11,23 +11,30 @@
         <div class="title">Pick a Category</div>
         <form name="categoryForm">
             <md-input-container>
-                <md-select name="category" placeholder="Pick" ng-model="category" ng-change="update(category)" required>
+                <md-select name="category" ng-model="category" ng-change="changeOption(category)" required>
+                    <md-select-label>{{ placeHolder }}</md-select-label>
                     <md-option value="{{ tab.id }}" ng-repeat="tab in tabs">{{ tab.name }}</md-option>
                 </md-select>
-            </md-input-container>
+
 
 
             <div class="editBtn" layout="row" layout-align="end center">
-                <md-button ng-click="showItems($event)" ng-disabled="playing || !category" class="md-warn" layout
-                           layout-align="center center">Edit Categories
-                </md-button>
+                @if (Auth::guest())
+                    <md-button ng-click="showConfirm($event)" ng-disabled="playing || !category" class="md-warn" layout
+                               layout-align="center center">Edit
+                    </md-button>
+                @else
+                    <md-button ng-click="showItems($event)" ng-disabled="playing || !category" class="md-warn" layout
+                               layout-align="center center">Edit
+                    </md-button>
+                @endif
 
             </div>
         </form>
-
         <div class="result">
             <h2>I would like to help you decide...{{ result }}</h2>
-            <md-button ng-click="select(category)" ng-disabled="false" class="md-accent md-raised md-hue-1" layout
+            <md-button ng-click="select($event, category)" ng-disabled="false" class="md-accent md-raised md-hue-1"
+                       layout
                        layout-align="start start">{{ btnText }}
             </md-button>
             <b layout="row" layout-align="center center" layout-margin>

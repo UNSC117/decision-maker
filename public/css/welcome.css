@@ -1,11 +1,11 @@
 html, body {
     overflow: hidden;
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    padding: 0;
     width: 100%;
     height: 100%;
     color: #B0BEC5;
@@ -30,18 +30,11 @@ body {
 }
 
 .title {
-    font-size: 96px;
+    font-size: 6em;
     margin-bottom: 40px;
-}
-
-section {
-    border-radius: 3px;
-    text-align: center;
-    margin: 1em;
-    position: relative !important;
-    padding-bottom: 15px;
     font-family: 'Lato', sans-serif;
-    font-weight: 400;
+    font-weight: 200;
+    color: #080808;
 }
 
 @-webkit-keyframes slideUp {

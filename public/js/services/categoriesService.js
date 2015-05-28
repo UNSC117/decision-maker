@@ -1,6 +1,6 @@
 angular.module('categoriesService', []).factory('Category', function($http) {
     return {
-        get: function(){
+        get: function() {
             return $http.get('/api/categories');
         },
 
@@ -8,15 +8,19 @@ angular.module('categoriesService', []).factory('Category', function($http) {
             return $http.get('/api/categories/' + id);
         },
 
-        save:function(category) {
+        store: function(category) {
             return $http({
-               method:'POST',
-                url:'/api/categories',
+                method: 'POST',
+                url: '/api/categories',
                 data: category
             });
         },
 
-        destory:function(id){
+        update: function(id, category) {
+            return $http.put('/api/categories/' + id, {'name': category.name, 'items': category.items});
+        },
+
+        destory: function(id) {
             return $http.delete('/api/categories');
         }
     }

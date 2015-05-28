@@ -24,41 +24,6 @@
 
         <link href="/css/master.css" rel="stylesheet">
 
-        <style rel="stylesheet" type="text/css">
-            .content {
-                text-align: center;
-                display: block;
-                margin: 0 auto;
-            }
-
-            .title {
-                margin: 0 auto;
-                font-size: 96px;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 200;
-                font-family: 'Lato';
-            }
-
-            md-select {
-                font-weight: 400;
-                font-family: 'Lato';
-            }
-
-            .result {
-                margin-top: 8%;
-                font-family: 'Architects Daughter', cursive;
-            }
-
-            .editBtn {
-                font-family: 'Architects Daughter', cursive;
-            }
-
-        </style>
-
         @yield('customizeCSS')
     </head>
     <body>
@@ -67,7 +32,6 @@
         <div class="container">
             @yield('content')
         </div>
-
 
         <!-- Jquery Scripts -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -79,6 +43,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+
         <!-- Angular Material Javascript now available via Google CDN; version 0.9 used here -->
         <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.0/angular-material.js"></script>
 

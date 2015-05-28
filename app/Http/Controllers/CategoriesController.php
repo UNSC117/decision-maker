@@ -39,6 +39,7 @@ class CategoriesController extends Controller {
                 {
                     $categories[] = array('id' => $category['id'], 'name' => $category['name'], 'items' => $category['items']);
                 }
+
                 return $categories;
             }
         }
@@ -97,9 +98,15 @@ class CategoriesController extends Controller {
      * @param  int $id
      * @return Response
      */
-    public function update($id)
+    public function update($id, Request $request)
     {
-        //
+        $category = Category::findOrFail($id);
+        if ($category->update(['name' => $request->get('name'), 'items' => $request->get('items')]))
+        {
+            return 'Your category has been updated successfully!';
+        } else {
+            return 'Oops...There were something wrong when processing update!';
+        }
     }
 
     /**

@@ -32,5 +32,5 @@ Route::get('/items', 'PagesController@showItems');
  *  Api flow setting
  */
 Route::group(array('prefix' => 'api'), function(){
-   Route::resource('categories', 'CategoriesController', ['only' => ['index', 'store', 'destroy', 'show']]);
+   Route::resource('categories', 'CategoriesController', ['except' => ['create', 'edit']]);
 });
