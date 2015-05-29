@@ -1,12 +1,22 @@
 (function() {
     'use strict';
-    dmApp.controller('playCtrl', function($scope, $interval, $mdDialog, Category) {
+    dmApp.controller('playCtrl', function($scope, $interval, $mdDialog, $timeout, Category) {
+        const HOLDER_INIT = 'My Categories...';
         $scope.tabs = {};
-        $scope.placeHolder = 'Select a Category';
+        $scope.placeHolder = HOLDER_INIT;
         $scope.btnText = 'PLAY';
         $scope.playing = false;
-        var play = false, self = this, stop, currentCategory;
 
+        var play = false, playTimes = 0, stop, currentCategory, self = this;
+        if (playTimes == 0) {
+            $scope.hintText = 'Welcome to Decision Maker';
+            $timeout(function() {
+                $scope.hintText = '1) Select a Category';
+            }, 2000);
+
+        } else {
+            $scope.hintText = 'So many options...';
+        }
         // Get categories from backend
         Category.get().success(function(data) {
             if (data) {
@@ -25,27 +35,49 @@
                         $mdDialog.alert()
                             .parent(angular.element(document.body))
                             .title('Alert')
-                            .content('Please pick a Category!')
+                            .content('Please select a Category!')
                             //.ariaLabel('Play Button')
                             .ok('Got it!')
                             .targetEvent(ev)
                     );
                 } else {
-                    var length = (self.items).length;
+                    if (playTimes != 3) {
+                        var length = (self.items).length;
+                        if (length == 0) {
+                            alert('there is no items in the list!');
+                        } else if (length == 1) {
+                            alert('Hey, there is only one item in the category, you don\'t have a choice!');
+                        } else {
+                            if (playTimes == 0) {
+                                $scope.hintText = '3) Stop any time :)';
+                            }
 
-                    $scope.btnText = 'Stop';
-                    $scope.playing = true;
-                    play = true;
-                    stop = $interval(function() {
-                        var min = 0;
-                        var max = length;
-                        var pos = Math.floor(Math.random() * (max - min)) + min;
-                        $scope.result = self.items[pos];
-                    }, 80);
+                            $scope.btnText = 'Stop';
+                            $scope.playing = true;
+                            play = true;
+                            stop = $interval(function() {
+                                var min = 0;
+                                var max = length;
+                                var pos = Math.floor(Math.random() * (max - min)) + min;
+                                $scope.result = self.items[pos];
+                            }, 80);
+                            playTimes++;
+                        }
+                    } else {
+                        alert('Hey, didn\'t get what you want? You know you can create or edit options, right?');
+                        $scope.btnText = 'Continue';
+                        playTimes++;
+                    }
                 }
             } else {
+                if (playTimes == 1) {
+                    $scope.hintText = 'Great! Hope you enjoyed it :)';
+                    $timeout(function() {
+                        $scope.hintText = 'Decision Maker';
+                    }, 5000);
+                }
                 $scope.stopSelect();
-                $scope.btnText = 'Continue';
+                $scope.btnText = 'Play, again!';
                 play = false;
                 $scope.playing = false;
             }
@@ -71,14 +103,23 @@
          * @param category
          */
         $scope.changeOption = function(category) {
-
+            self.items = [];
             Category.getItems(category).success(function(data) {
                 $scope.result = data.name;
                 currentCategory = data.name;
                 $scope.placeHolder = data.name;
-                // convert items from string(in DB) to array
-                self.items = (data.items).split(',');
+
+                var items = (data.items).split(/,+/);
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].trim() != "") {
+                        (self.items).push(items[i]);
+                    }
+                }
+
                 $scope.btnText = 'PLAY';
+                if (playTimes == 0) {
+                    $scope.hintText = '2) Hit Play!!!';
+                }
             }).error(function(data) {
                 console.log(data);
             });
@@ -92,7 +133,7 @@
             // Appending dialog to document.body to cover sidenav in docs app
             var confirm = $mdDialog.confirm()
                 .title('Would you like to login and enjoy more feature?')
-                .content('After login your with account, you can create customized categories and list as many item options as you want!')
+                .content('After login with your account, you can create customized categories and list as many item options as you need!')
                 .ariaLabel('Edit Categories')
                 .ok('Sounds great, Login!')
                 .cancel('Cancel')
@@ -103,35 +144,97 @@
         };
 
         /**
-         * Popup for edit items
+         * Popup, call service to edit items in current category
          * @param ev
          */
         $scope.showItems = function(ev) {
             $mdDialog.show({
                 controller: DialogController,
-                locals: {name: currentCategory, items: self.items},
+                locals: {'name': currentCategory, 'items': self.items},
                 templateUrl: 'items',
                 targetEvent: ev,
             })
                 .then(function(updateData) { // true
-                    if (updateData) {
-                        Category.update($scope.category, updateData).success(function(data) {
-                            $scope.alert = data;
-                            Category.get().success(function(data) {
-                                if (data) {
-                                    $scope.tabs = data;
-                                }
-                            });
-                            $scope.changeOption($scope.category);
+                    Category.update($scope.category, updateData).success(function(data) {
+                        Category.get().success(function(data) {
+                            if (data) {
+                                $scope.tabs = data;
+                            }
                         });
-                    } else {
-                        $scope.alert = 'You\'ve canceled the edit.';
-                    }
-                }, function() { // false
-                    $scope.alert = 'You cancelled the dialog.';
+                        $scope.changeOption($scope.category);
+                        $scope.alert = data;
+                        $scope.clearAlertMsg();
+                    });
                 });
         };
 
+        /**
+         * Popup, call service to create category and item options
+         * @param ev event target
+         */
+        $scope.addCategory = function(ev) {
+            $mdDialog.show({
+                controller: CreateController,
+                templateUrl: 'items',
+                targetEvent: ev,
+            })
+                .then(function(createDate) { // true
+                    Category.store(createDate).success(function(lastInsertId) {
+                        Category.get().success(function(data) {
+                            if (data) {
+                                $scope.tabs = data;
+                            }
+                        });
+                        $scope.changeOption(lastInsertId);
+                        $scope.alert = 'You\'ve successfully created a new category!';
+                        $scope.clearAlertMsg();
+                        $scope.category = lastInsertId;
+                    });
+                });
+        };
+
+        /**
+         * call category service to remove one category
+         * @param ev
+         */
+        $scope.removeCategory = function(ev) {
+            var prevName = $scope.placeHolder;
+            var c = $mdDialog.confirm()
+                .title('Confirm')
+                .content('Do you want to remove "' + prevName + '" ?')
+                .ok('Yes')
+                .cancel('Cancel')
+                .targetEvent(ev);
+            $mdDialog.show(c).then(function() {
+                Category.destory($scope.category).success(function(data) {
+                    if (data) {
+                        $scope.alert = prevName + ' removed!';
+                        Category.get().success(function(data) {
+                            if (data) {
+                                $scope.tabs = data;
+                            }
+                        });
+
+                        $scope.category = undefined;
+                        $scope.placeHolder = HOLDER_INIT;
+                    } else {
+                        $scope.alert = 'Oops, something wrong when remove ' + prevName;
+                    }
+                    $scope.clearAlertMsg();
+                });
+            }).finally(function() {
+                c = undefined;
+            });
+        };
+
+        /**
+         * clear alert massage for user after 2500 milliseconds
+         */
+        $scope.clearAlertMsg = function() {
+            $timeout(function() {
+                $scope.alert = '';
+            }, 2500);
+        }
     });
 
     /**
@@ -148,10 +251,31 @@
             $mdDialog.cancel();
         };
         $scope.answer = function(updateData) {
-            $mdDialog.hide(updateData);
+            if (updateData.name) {
+                $mdDialog.hide(updateData);
+            }
         };
-
         $scope.category = locals;
     }
 
+
+    /**
+     * template html controller for angular popup dialog
+     * @param $scope
+     * @param $mdDialog
+     * @constructor
+     */
+    function CreateController($scope, $mdDialog) {
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function(createData) {
+            if (createData.name) {
+                $mdDialog.hide(createData);
+            }
+        };
+    }
 })();

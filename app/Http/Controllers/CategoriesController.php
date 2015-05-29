@@ -44,17 +44,26 @@ class CategoriesController extends Controller {
             }
         }
 
-
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param Requests\CategoryRequest $request
      * @return Response
      */
-    public function store()
+    public function store(Requests\CategoryRequest $request)
     {
-        //
+
+        if ($category = new Category($request->all()))
+        {
+            if (Auth::user()->categories()->save($category))
+            {
+                return $category->id;
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -101,10 +110,12 @@ class CategoriesController extends Controller {
     public function update($id, Request $request)
     {
         $category = Category::findOrFail($id);
-        if ($category->update(['name' => $request->get('name'), 'items' => $request->get('items')]))
+        $items = is_array($request->get('items')) ? implode(',', $request->get('items')) : $request->get('items');
+        if ($category->update(['name' => $request->get('name'), 'items' => $items]))
         {
             return 'Your category has been updated successfully!';
-        } else {
+        } else
+        {
             return 'Oops...There were something wrong when processing update!';
         }
     }
@@ -117,7 +128,13 @@ class CategoriesController extends Controller {
      */
     public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        if ($category->delete())
+        {
+            return 1;
+        }
+
+        return 0;
     }
 
 }

@@ -36,9 +36,6 @@
         <!-- Jquery Scripts -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-        <!-- Bootstrap Scripts -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
         <!-- Angular Material Dependencies -->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
@@ -48,7 +45,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.0/angular-material.js"></script>
 
         <script src="/js/app.js"></script>
-        <script src='/js/controllers/categoriesController.js'></script>
         <script src='/js/controllers/playController.js'></script>
         <script src='/js/services/categoriesService.js'></script>
 

@@ -12,7 +12,7 @@ angular.module('categoriesService', []).factory('Category', function($http) {
             return $http({
                 method: 'POST',
                 url: '/api/categories',
-                data: category
+                data: {'name': category.name, 'items': category.items}
             });
         },
 
@@ -21,7 +21,7 @@ angular.module('categoriesService', []).factory('Category', function($http) {
         },
 
         destory: function(id) {
-            return $http.delete('/api/categories');
+            return $http.delete('/api/categories/' + id);
         }
     }
 });
