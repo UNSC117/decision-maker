@@ -4,6 +4,7 @@
         const HOLDER_INIT = 'My Categories...';
         $scope.tabs = {};
         $scope.placeHolder = HOLDER_INIT;
+        dmApp
         $scope.btnText = 'PLAY';
         $scope.playing = false;
 
@@ -26,27 +27,20 @@
 
         /**
          * Start random selection
-         * @param category
+         * @param ev
+         * @param category category id from select option
          */
         $scope.select = function(ev, category) {
             if (!play) {
                 if (!category) {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .parent(angular.element(document.body))
-                            .title('Alert')
-                            .content('Please select a Category!')
-                            //.ariaLabel('Play Button')
-                            .ok('Got it!')
-                            .targetEvent(ev)
-                    );
+                    $scope.showAlert(ev, angular.element(document.body), 'Alert', 'Please select a Category!', 'Alert', 'Got it');
                 } else {
                     if (playTimes != 3) {
                         var length = (self.items).length;
                         if (length == 0) {
-                            alert('there is no items in the list!');
+                            $scope.showAlert(ev, angular.element(document.body), 'Alert', 'There is no item in the list XD', 'Alert', 'Got it');
                         } else if (length == 1) {
-                            alert('Hey, there is only one item in the category, you don\'t have a choice!');
+                            $scope.showAlert(ev, angular.element(document.body), 'Alert', 'Hey →_→, there is only one item in the category!', 'Alert', 'Got it');
                         } else {
                             if (playTimes == 0) {
                                 $scope.hintText = '3) Stop any time :)';
@@ -58,13 +52,16 @@
                             stop = $interval(function() {
                                 var min = 0;
                                 var max = length;
-                                var pos = Math.floor(Math.random() * (max - min)) + min;
+                                var pos = randomInt(max, min);
                                 $scope.result = self.items[pos];
                             }, 80);
+
+                            $scope.flashItems();
+
                             playTimes++;
                         }
                     } else {
-                        alert('Hey, didn\'t get what you want? You know you can create or edit options, right?');
+                        $scope.showAlert(ev, angular.element(document.body), 'Hint', 'Didn\'t get what you want? You can create or edit options!', 'Hint', 'Got it');
                         $scope.btnText = 'Continue';
                         playTimes++;
                     }
@@ -77,6 +74,7 @@
                     }, 5000);
                 }
                 $scope.stopSelect();
+                $scope.stopFlash();
                 $scope.btnText = 'Play, again!';
                 play = false;
                 $scope.playing = false;
@@ -84,8 +82,27 @@
         };
 
         /**
-         *  Stop random selection interval
+         * function for material design alert
+         * @param ev event target
+         * @param parent alert parent element
+         * @param title alert title
+         * @param content alert content
+         * @param ariaLabel
+         * @param ok
          */
+        $scope.showAlert = function(ev, parent, title, content, ariaLabel, ok) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(parent)
+                    .title(title)
+                    .content(content)
+                    .ariaLabel(ariaLabel)
+                    .ok(ok)
+                    .targetEvent(ev)
+            );
+        }
+
+        // Stop random selection interval
         $scope.stopSelect = function() {
             if (angular.isDefined(stop)) {
                 $interval.cancel(stop);
@@ -100,7 +117,7 @@
 
         /**
          * Select option on change, set item list under this option
-         * @param category
+         * @param category category id form select options
          */
         $scope.changeOption = function(category) {
             self.items = [];
@@ -163,7 +180,7 @@
                         });
                         $scope.changeOption($scope.category);
                         $scope.alert = data;
-                        $scope.clearAlertMsg();
+                        $scope.clearAlertMsg(2500);
                     });
                 });
         };
@@ -187,7 +204,7 @@
                         });
                         $scope.changeOption(lastInsertId);
                         $scope.alert = 'You\'ve successfully created a new category!';
-                        $scope.clearAlertMsg();
+                        $scope.clearAlertMsg(2500);
                         $scope.category = lastInsertId;
                     });
                 });
@@ -220,27 +237,65 @@
                     } else {
                         $scope.alert = 'Oops, something wrong when remove ' + prevName;
                     }
-                    $scope.clearAlertMsg();
+                    $scope.clearAlertMsg(2500);
                 });
             }).finally(function() {
                 c = undefined;
             });
         };
 
-        /**
-         * clear alert massage for user after 2500 milliseconds
-         */
-        $scope.clearAlertMsg = function() {
+        //clear alert massage for user after 2500 milliseconds
+        $scope.clearAlertMsg = function(durition) {
             $timeout(function() {
                 $scope.alert = '';
-            }, 2500);
+            }, durition);
+        }
+
+        var stopFlash;
+        /**
+         * temporary items interval flash on window
+         */
+        $scope.flashItems = function() {
+            var body = $("body"), width = body.width(), height = body.height();
+
+            stopFlash = $interval(function() {
+                var pos = randomInt((self.items).length),
+                    item = (self.items)[pos],
+                    top = randomInt(height),
+                    left = randomInt(width - 50),
+                    alpha = randomInt(8, 4) / 10,
+                    font_size = randomInt(40, 15);
+                var flashOption = $("<span class='flash'>" + item + "</span>").css({
+                    top: top,
+                    left: left,
+                    color: "rgba(0,0,0," + alpha + ")",
+                    fontSize: font_size + "px"
+                }).appendTo(body);
+
+                flashOption.hide().fadeIn("slow", function() {
+                    $(this).fadeOut("slow", function() {
+                        $(this).remove();
+                    });
+                });
+
+            }, 80);
+        };
+
+        // Stop random flash interval
+        $scope.stopFlash = function() {
+            if (angular.isDefined(stopFlash)) {
+                $interval.cancel(stopFlash);
+                stopFlash = undefined;
+            }
         }
     });
 
     /**
      * template html controller for angular popup dialog
-     * @param $scope
-     * @param $mdDialog
+     *
+     * @param $scope angular controller scope
+     * @param $mdDialog injection for mdDialog module
+     * @param locals variables passed from parent
      * @constructor
      */
     function DialogController($scope, $mdDialog, locals) {
@@ -261,6 +316,7 @@
 
     /**
      * template html controller for angular popup dialog
+     *
      * @param $scope
      * @param $mdDialog
      * @constructor
@@ -277,5 +333,11 @@
                 $mdDialog.hide(createData);
             }
         };
+    }
+
+    function randomInt(max, min) {
+        max = max || 100;
+        min = min || 0;
+        return Math.floor(Math.random() * (max - min) + min);
     }
 })();

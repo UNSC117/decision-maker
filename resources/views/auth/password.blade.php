@@ -1,7 +1,7 @@
-@extends('app')
+@extends('master')
 
 @section('content')
-<div class="container-fluid">
+<div class="container">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
 			<div class="panel panel-default">
@@ -24,7 +24,7 @@
 						</div>
 					@endif
 
-					<form class="form-horizontal" role="form" method="POST" action="<% url('/password/email') %>">
+					<form class="form-horizontal user-auth" role="form" method="POST" action="<% url('/password/email') %>">
 						<input type="hidden" name="_token" value="<% csrf_token() %>">
 
 						<div class="form-group">
@@ -36,9 +36,9 @@
 
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">
+								<md-button class="md-accent md-hue-3 md-raised">
 									Send Password Reset Link
-								</button>
+                                </md-button>
 							</div>
 						</div>
 					</form>

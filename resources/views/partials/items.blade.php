@@ -1,8 +1,8 @@
-<md-dialog aria-label="Items" style="width: 30%;">
+<md-dialog aria-label="Items" flex="33">
     <md-content layout-padding>
         <form name="itemForm">
             <md-dialog-content class="sticky-container">
-                <md-subheader class="md-sticky-no-effect">Edit items, divide by comma...</md-subheader>
+                <md-subheader class="md-sticky-no-effect">Customize your options, divide by comma ","</md-subheader>
                 <div>
                     <md-input-container>
                         <label>Category Name</label>
