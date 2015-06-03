@@ -19,9 +19,17 @@
 
                 <div class="editBtn" layout="row" layout-align="end center">
                     @if (Auth::guest())
-                        <md-button ng-click="showConfirm($event)" ng-disabled="playing || !category"
+                        <md-button ng-click="showLoginRequest($event)" ng-disabled="playing || !category"
                                    class="md-accent md-raised  md-hue-1" layout
                                    layout-align="center center">Edit
+                        </md-button>
+                        <md-button ng-click="showLoginRequest($event)" ng-disabled="playing" class="md-primary md-raised"
+                                   layout
+                                   layout-align="center center">New
+                        </md-button>
+                        <md-button ng-click="showLoginRequest($event)" ng-disabled="playing || !category"
+                                   class="md-warn md-raised" layout
+                                   layout-align="center center">remove
                         </md-button>
                     @else
                         <md-button ng-click="showItems($event)" ng-disabled="playing || !category"

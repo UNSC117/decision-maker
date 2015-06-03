@@ -146,7 +146,7 @@
          * If guest, request to login then edit categories
          * @param ev
          */
-        $scope.showConfirm = function(ev) {
+        $scope.showLoginRequest = function(ev) {
             // Appending dialog to document.body to cover sidenav in docs app
             var confirm = $mdDialog.confirm()
                 .title('Would you like to login and enjoy more feature?')

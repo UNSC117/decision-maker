@@ -11,14 +11,16 @@
 |
 */
 
+/**
+ * to avoid conflicts with angularJs
+ */
 Blade::setContentTags('<%', '%>');        // for variables and all things Blade
 Blade::setEscapedContentTags('<%%', '%%>');   // for escaped data
+
 /**
  * Page flow setting
  */
-
 Route::get('/', 'WelcomeController@index');
-//Route::get('home', 'HomeController@index');
 
 Route::controllers([
     'auth'     => 'Auth\AuthController',

@@ -14,9 +14,9 @@ class CategoriesController extends Controller {
     public function __construct()
     {
         $this->myCategories = array(
-            ['id' => 99999997, 'name' => "Breakfast", 'items' => '面包, 蛋糕, 荷包蛋, 烧饼, 饽饽, 油条, 馄饨, 火腿'],
-            ['id' => 99999998, 'name' => "Lunch", 'items' => '盖浇饭, 砂锅, 大排档, 米线, 满汉全席, 西餐, 麻辣烫, 自助餐, 炒面, 快餐, 水果, 西北风, 馄饨, 火锅, 烧烤, 面'],
-            ['id' => 99999999, 'name' => "Dinner", 'items' => '速冻水饺, 日本料理, 涮羊肉, 味千拉面, 肯德基, 面包, 扬州炒饭, 自助餐, 茶餐厅, 海底捞, 咖啡, 比萨, 麦当劳, 兰州拉面, 沙县小吃']
+            ['id' => 99999997, 'name' => "Breakfast", 'items' => 'Cereal, Pancake, Fruit, French Toast, Bacon, Eggs, Buy Subway, Muffins'],
+            ['id' => 99999998, 'name' => "Lunch", 'items' => 'Apple Pie, Sandwich, Burger, Subway, McDonald, Fruit Salad, Fish and Chips, Ramen Noodles, Chinese Food, Pizza my love!, BBQ'],
+            ['id' => 99999999, 'name' => "Movie List", 'items' => 'Iron Man, San Andreas, Avengers 2, Tomorrowland, Spider-Man, Jurassic Park, Argo, Life of Pie, Titanic, Terminator, Harry Potter']
         );
     }
 
