@@ -50,7 +50,8 @@
         </form>
         <div class="result">
             <h2>I would like to help you decide...{{ result }}</h2>
-            <md-button ng-click="select($event, category)" ng-disabled="false" class="md-accent md-raised  md-hue-2"
+            <md-button id="playBtn"
+                       ng-click="select($event, category)" ng-disabled="false" class="md-accent md-raised  md-hue-2"
                        layout
                        layout-align="start start">{{ btnText }}
             </md-button>
@@ -60,18 +61,4 @@
         </div>
     </div>
 
-@stop
-
-@section('customizeJS')
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-        });
-
-        function randomInt(max, min) {
-            max = max || 100;
-            min = min || 0;
-            return Math.floor(Math.random() * (max - min) + min);
-        }
-    </script>
 @stop

@@ -8,15 +8,13 @@
         $scope.btnText = 'PLAY';
         $scope.playing = false;
 
-        var play = false, playTimes = 0, stop, currentCategory, self = this;
-        if (playTimes == 0) {
+        var play = false, playTimes = 0, playHint = false, initPlay = true, stop, currentCategory, self = this;
+        if (playTimes == 0 && initPlay) {
             $scope.hintText = 'Welcome to Decision Maker';
             $timeout(function() {
                 $scope.hintText = '1) Select a Category';
             }, 2000);
 
-        } else {
-            $scope.hintText = 'So many options...';
         }
         // Get categories from backend
         Category.get().success(function(data) {
@@ -35,14 +33,14 @@
                 if (!category) {
                     $scope.showAlert(ev, angular.element(document.body), 'Alert', 'Please select a Category!', 'Alert', 'Got it');
                 } else {
-                    if (playTimes != 3) {
+                    if (playHint || playTimes != 3) {
                         var length = (self.items).length;
                         if (length == 0) {
                             $scope.showAlert(ev, angular.element(document.body), 'Alert', 'There is no item in the list XD', 'Alert', 'Got it');
                         } else if (length == 1) {
                             $scope.showAlert(ev, angular.element(document.body), 'Alert', 'Hey →_→, there is only one item in the category!', 'Alert', 'Got it');
                         } else {
-                            if (playTimes == 0) {
+                            if (playTimes == 0 && initPlay) {
                                 $scope.hintText = '3) Stop any time :)';
                             }
 
@@ -60,18 +58,20 @@
 
                             playTimes++;
                         }
-                    } else {
+                    } else if (!playHint){
+                        playHint = true;
                         $scope.showAlert(ev, angular.element(document.body), 'Hint', 'Didn\'t get what you want? You can create or edit options!', 'Hint', 'Got it');
                         $scope.btnText = 'Continue';
                         playTimes++;
                     }
                 }
             } else {
-                if (playTimes == 1) {
+                if (playTimes == 1 && initPlay) {
                     $scope.hintText = 'Great! Hope you enjoyed it :)';
                     $timeout(function() {
                         $scope.hintText = 'Decision Maker';
                     }, 5000);
+                    initPlay = false;
                 }
                 $scope.stopSelect();
                 $scope.stopFlash();
@@ -121,6 +121,7 @@
          */
         $scope.changeOption = function(category) {
             self.items = [];
+            playTimes = 0;
             Category.getItems(category).success(function(data) {
                 $scope.result = data.name;
                 currentCategory = data.name;
@@ -134,7 +135,7 @@
                 }
 
                 $scope.btnText = 'PLAY';
-                if (playTimes == 0) {
+                if (playTimes == 0 && initPlay) {
                     $scope.hintText = '2) Hit Play!!!';
                 }
             }).error(function(data) {
